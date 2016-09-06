@@ -25,7 +25,7 @@ public class Observable
         observers.remove(observer);
     }
 
-    public void addUpdate(Field field, FieldUpdate update, Object... args)
+    public void addUpdate(Field field, FieldUpdate update)
     {
         FieldUpdate previousUpdate = updates.remove(field);
         if(previousUpdate != null)
@@ -40,12 +40,20 @@ public class Observable
         }
     }
 
-    public void notifyObservers(Object... args)
+    public void notifyObservers()
     {
         observers.forEach(o -> {
-            if(o.isApplicable(this, updates))
+            try
             {
-                o.update(this, updates, args);
+                if(o.isApplicable(this, updates))
+                {
+                    o.update(this, updates);
+                }
+
+            }
+            catch(Exception e) 
+            {
+
             }
         });
 
